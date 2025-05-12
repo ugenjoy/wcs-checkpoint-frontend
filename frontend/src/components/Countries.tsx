@@ -36,14 +36,8 @@ export function Countries() {
                   className="hover:bg-secondary hover:cursor-pointer border border-border rounded w-full flex flex-wrap"
                   onClick={() => navigate(`/countries/${country.code}`)}
                 >
-                  <TableCell className="font-medium ">
-                    {country.emoji}
-                  </TableCell>
-                  <TableCell className="font-bold ">{country.name}</TableCell>
-                  <TableCell className="">
-                    {country.continent?.name ?? ''}
-                  </TableCell>
-                  <TableCell className="text-right ">{country.code}</TableCell>
+                  <TableCell className="font-medium">{country.emoji}</TableCell>
+                  <TableCell className="font-bold">{country.name}</TableCell>
                 </TableRow>
               )
             })}

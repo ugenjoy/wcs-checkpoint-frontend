@@ -21,6 +21,8 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { GET_CONTINENTS } from '@/api/get-continents'
 import { CREATE_COUNTRY } from '@/api/create-country'
+import { useNavigate } from 'react-router-dom'
+import { GET_COUNTRIES } from '@/api/get-countries'
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -29,9 +31,14 @@ const formSchema = z.object({
   continent: z.string(),
 })
 
-export function CountryForm() {
+type CountryFormPropsType = {
+  closeDialog: () => void
+}
+
+export function CountryForm(props: CountryFormPropsType) {
   const [createCountry] = useMutation(CREATE_COUNTRY)
   const { loading, error, data } = useQuery(GET_CONTINENTS)
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,10 +50,9 @@ export function CountryForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-
-    createCountry({
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await createCountry({
+      refetchQueries: [GET_COUNTRIES],
       variables: {
         data: {
           name: values.name,
@@ -60,6 +66,12 @@ export function CountryForm() {
         },
       },
     })
+
+    props.closeDialog()
+
+    if (res.data?.createCountry.code) {
+      navigate(`/countries/${res.data.addCountry.code}`)
+    }
   }
 
   return (
