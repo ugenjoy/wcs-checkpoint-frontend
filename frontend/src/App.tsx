@@ -1,14 +1,15 @@
-import "./App.css";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/Home";
-import { PageLayout } from "./components/Layout";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import './index.css'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { CountryPage } from './pages/Country'
+import { HomePage } from './pages/Home'
+import { PageLayout } from './components/Layout'
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 
 const client = new ApolloClient({
-  uri: "/api",
+  uri: '/api',
   cache: new InMemoryCache(),
-  credentials: "same-origin",
-});
+  credentials: 'same-origin',
+})
 
 function App() {
   return (
@@ -17,12 +18,13 @@ function App() {
         <Routes>
           <Route Component={PageLayout}>
             <Route path="/" Component={HomePage} />
+            <Route path="/countries/:code" Component={CountryPage} />
             <Route path="*" Component={() => <Navigate to="/" />} />
           </Route>
         </Routes>
       </BrowserRouter>
     </ApolloProvider>
-  );
+  )
 }
 
-export default App;
+export default App
